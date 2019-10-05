@@ -19,7 +19,7 @@ passport.use(new FacebookStrategy({
         clientID: keys.FacebookClientID,
         clientSecret: keys.FacebookClientSecret,
         callbackURL: "/auth/facebook/callback",
-        profileFields: ['id', 'displayName','name','photos', 'emails'],
+        profileFields: ['id', 'displayName','name','photos', 'email'],
         proxy: true
     },
     (accessToken, refreshToken, profile, done) => {
@@ -35,7 +35,7 @@ passport.use(new FacebookStrategy({
                     fullname:profile.displayName,
                     firstname:profile.name.givenName,
                     lastname:profile.name.familyName,
-                 //  email:profile.emails[0].value,
+                  email:profile.emails[0].value,
                     image:`https://graph.facebook.com/${profile.id}/picture?type=large`
                 }
                 new User(newUser).save()
