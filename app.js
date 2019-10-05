@@ -12,8 +12,10 @@ const cookieParser = require('cookie-parser');
 // Connect to MongoURI exported from external file
 const keys = require('./config/keys');
 const User = require('./models/user');
-require('./passport/google-passport');
 
+//Link Passports to the Server
+require('./passport/google-passport');
+require('./passport/facebook-passport');
 
 // initialize application
 const app = express();
@@ -92,6 +94,19 @@ app.get('/auth/google/callback',
         res.redirect('/profile');
     });
 
+
+    //Facebook Auth Route
+app.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/' }),
+  (req, res)=> {
+    // Successful authentication, redirect home.
+    res.redirect('/profile');
+  });
+ 
+  //Profile Route
 app.get('/profile', (req, res) => {
    
     User.findById({_id:req.user._id})
