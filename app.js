@@ -99,7 +99,7 @@ app.get('/auth/google/callback',
     //Facebook Auth Route
 app.get('/auth/facebook',
   passport.authenticate('facebook',{
-      scope:'email'
+      scope:['email']
   }));
 
 app.get('/auth/facebook/callback',
