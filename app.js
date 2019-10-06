@@ -17,7 +17,13 @@ const User = require('./models/user');
 require('./passport/google-passport');
 require('./passport/facebook-passport');
 require('./passport/instagram-passport');
+ 
+//Link Helpers
 
+const {
+    ensureAuthentication,
+    ensureGuest
+}=require('./helpers/auth');
 // initialize application
 const app = express();
 
@@ -71,7 +77,7 @@ mongoose.connect(keys.MongoURI, {
 // set environment variable for port
 const port = process.env.PORT || 3000;
 // Handle routes
-app.get('/', (req, res) => {
+app.get('/',ensureGuest,(req, res) => {
     res.render('main');
 });
 
@@ -121,7 +127,7 @@ app.get('/auth/instagram/callback',
     res.redirect('/profile');
   });
   //Profile Route
-app.get('/profile', (req, res) => {
+app.get('/profile',ensureAuthentication,(req, res) => {
    
     User.findById({_id:req.user._id})
     
