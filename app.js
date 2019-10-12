@@ -152,6 +152,33 @@ app.post('/addEmail',(req,res)=>{
     });
 });
 
+//Handle Phone post Route
+app.post('/addPhone',(req,res) => {
+const phone =req.body.phone;
+User.findById({_id :req.user._id})
+.then((user) => {
+      user.phone =phone;    
+      user.save()
+.then(() =>{
+    res.redirect('/profile');
+});
+});
+});
+
+//Handle Location post Route
+app.post('/addLocation',(req,res) => {
+    const location=req.body.location;
+    User.findById({_id:req.user._id})
+    .then((user) => {
+        user.location=location;
+        user.save()
+        .then(()=>{
+            res.redirect('/profile');
+        });
+    });
+});
+
+
 //Handle User Logout
 
 app.get('/logout',(req,res)=>{
