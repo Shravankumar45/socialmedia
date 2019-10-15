@@ -1,8 +1,14 @@
 body {
-
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-
 }
+#shravan{
+  background:url(../images/db.jpg) no-repeat center fixed ;
+  background-size:cover;
+}
+/* 
+#homepage{
+  background-size:cover;
+}  */
 .btn-facebook{
   background-color:#4aa1f3;
   border:0%;
@@ -59,4 +65,14 @@ h1{
 
 #address{
   color:green;
+}
+.post-user{
+  width:100px;
+  height:auto;
+}
+#s1{
+  color:white;
+  
+  text-shadow: 2px 2px 5px red;
+
 }

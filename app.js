@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 // Connect to MongoURI exported from external file
 const keys = require('./config/keys');
 const User = require('./models/user');
+const Post = require('./models/post');
 
 //Link Passports to the Server
 require('./passport/google-passport');
@@ -126,28 +127,34 @@ app.get('/auth/instagram/callback',
     // Successful authentication, redirect home.
     res.redirect('/profile');
   });
+
   //Profile Route
 app.get('/profile',ensureAuthentication,(req, res) => {
-   
-    User.findById({_id:req.user._id})
-    
-    .then((user)=>{
-        res.render('profile',{
-            user:user
-        });
-    })
+  Post.find({user: req.user._id})
+  .populate('user')
+  .then((posts)=>{
+      res.render('profile',{posts:posts});
+  });
    
 });
 
 //Handle Route for all Users
 
-app.get('/users',(req,res)=>{
+app.get('/users',ensureAuthentication,(req,res)=>{
 User.find({})
 .then((users) =>{
 res.render('users',{
     users:users
 });
-})
+});
+});
+
+//Display one user profile
+app.get('/user/:id',(req,res)=>{
+User.findById({_id:req.params.id})
+.then((user) =>{
+    res.render('user',{user:user});
+});
 });
 
 //Handle email route
@@ -190,6 +197,44 @@ app.post('/addLocation',(req,res) => {
 });
 
 
+//Handle addpost Route
+app.get('/addpost',(req,res)=>{
+    res.render('addPost');
+})
+
+//Handle Post route
+app.post('/savePost',(req,res)=>{
+var allowComments;
+if(req.body.allowComments){
+            allowComments =true;
+}else{
+    allowComments = false;
+}
+const newPost={
+    title:req.body.title,
+    body:req.body.body,
+    status:req.body.status,
+    allowComments:allowComments,
+    user:req.user._id,
+}
+new Post(newPost).save()
+.then(()=>{
+    res.redirect('/posts');
+});
+});
+
+//Handle posts route
+
+app.get('/posts',ensureAuthentication,(req,res)=>{
+Post.find({status:'public'})
+.populate('user')
+.sort({date: 'desc'})
+.then((posts)=>{
+res.render('publicPosts',{
+posts:posts
+});
+});
+});
 //Handle User Logout
 
 app.get('/logout',(req,res)=>{

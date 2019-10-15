@@ -46,6 +46,27 @@
             <% } %>
         </div>
     </div>
+    <div class="container">
+        <h1>My Posts</h1>
+            <% if(posts) { %>
+            <% posts.forEach(function(posts) { %>
+            <div class="media">
+                <img src="<%= posts.user.image%>" class="mr-3 post-user">
+        
+                <div class="media-body">
+                  <h3 class="mt-0"><%=posts.user.fullname%></h3>
+                 
+                <h4><%=posts.title %><small class="text-info"> <%=posts.status%></small></h4>
+                <p><%=posts.body %></p>
+                <small><%=posts.date%></small>
+                </div>
+              </div>
+              <hr>
+              <% }); %>
+              <% }else{%>
+                   <p>You do not have any posts</p>
+                <% } %>
+        </div>
 </div>
 
 
