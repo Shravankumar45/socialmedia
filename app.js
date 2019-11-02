@@ -203,8 +203,8 @@ app.post('/addLocation',(req,res) => {
 
 //Handle addpost Route
 app.get('/addpost',(req,res)=>{
-    res.render('addPost');
-})
+    res.render('addpost');
+});
 
 //Handle Post route
 app.post('/savePost',(req,res)=>{
