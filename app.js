@@ -7,6 +7,7 @@ const passport = require('passport');
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
+const methodOverride=require('method-override');
 
 
 // Connect to MongoURI exported from external file
@@ -44,7 +45,8 @@ const app = express();
      saveUninitialized: true
  }));
 
-
+ app.use(methodOverride('_method'));
+//Passport Config
  app.use(passport.initialize());
  app.use(passport.session());
 
@@ -54,13 +56,14 @@ const app = express();
  res.locals.user=req.user || null;
  next();
  });
+ 
 
 
 //Setting up the template
 app.set('views', path.join(__dirname, 'views')); 
 app.set('view engine', 'ejs');
 
-// setup static file to serve css, javascript and images
+// setup static folder to serve css, javascript and images
 app.use(expressLayouts);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -132,6 +135,7 @@ app.get('/auth/instagram/callback',
 app.get('/profile',ensureAuthentication,(req, res) => {
   Post.find({user: req.user._id})
   .populate('user')
+  .sort({date:'desc'})
   .then((posts)=>{
       res.render('profile',{posts:posts});
   });
@@ -221,6 +225,37 @@ new Post(newPost).save()
 .then(()=>{
     res.redirect('/posts');
 });
+});
+
+//Handle Edit post route
+app.get('/editPost/:id',(req,res) => {
+    Post.findOne({_id:req.params.id})
+    .then((post)=>{
+        res.render('editingPost',{
+            post:post
+        });
+    });
+});
+
+//Handle put Route to Save edited post
+app.put('/editingPost/:id',(req,res)=>{
+    Post.findOne({_id:req.params.id})
+    .then((post)=>{
+        var allowComments;
+        if(req.body.allowComments){
+            allowComments=true;
+        }else{
+            allowComments=false;
+        }
+        post.title=req.body.title;
+        post.body=req.body.body;
+        post.status=req.body.status;
+        post.allowComments=allowComments;
+        post.save()
+        .then(()=>{
+            res.redirect('/profile');
+        });
+    });
 });
 
 //Handle posts route

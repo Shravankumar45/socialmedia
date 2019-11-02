@@ -1,10 +1,10 @@
-<div class="container-fluid">
+<div class="container-fluid" style="color:white;">
     <div class="row">
         <div class="col-sm-4">
         <div class="card" style="width: 18rem;">
             <img class="card-img-top" src="<%= user.image %>">
             <div class="card-body">
-                <h5 class="card-title"><%= user.fullname%></h5>
+                <h5 class="card-title text-warning"><%= user.fullname%></h5>
             </div>
         </div>
         </div>
@@ -46,7 +46,7 @@
             <% } %>
         </div>
     </div>
-    <div class="container">
+    <div class="container" style="color:white;">
         <h1>My Posts</h1>
             <% if(posts) { %>
             <% posts.forEach(function(posts) { %>
@@ -59,6 +59,8 @@
                 <h4><%=posts.title %><small class="text-info"> <%=posts.status%></small></h4>
                 <p><%=posts.body %></p>
                 <small><%=posts.date%></small>
+                <br>
+                <p><a href="/editPost/<%=posts._id%>"><i class="fa fa-pencil"></i></a></p>
                 </div>
               </div>
               <hr>

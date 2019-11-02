@@ -1,11 +1,11 @@
-<div class="container">
+<div class="container" style="color:white;"> 
     <% if(posts) { %>
     <% posts.forEach(function(posts) { %>
     <div class="media">
         <img src="<%= posts.user.image%>" class="mr-3 post-user">
 
         <div class="media-body">
-          <h3 class="mt-0"><%=posts.user.fullname%></h3>
+          <h3 class="mt-0 text-warning"><%=posts.user.fullname%></h3>
          
         <h4><%=posts.title %><small class="text-info"><i class="fa fa-globe"></i></small></h4>
         <p><%=posts.body %></p>

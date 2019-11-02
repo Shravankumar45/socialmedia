@@ -3,12 +3,12 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user');
 const keys = require('../config/keys');
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser( (user, done)=> {
     done(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
-    User.findById(id, function (err, user) {
+passport.deserializeUser( (id, done)=> {
+    User.findById(id,  (err, user)=> {
         done(err, user);
     });
 });
@@ -23,7 +23,8 @@ passport.use(new GoogleStrategy({     //We use Google Stratergy to retrive users
        console.log(profile);
        User.findOne({
            google: profile.id
-       }).then((user) => {
+       })
+       .then((user) => {
            if(user){
                done(null, user);
            }else{
